@@ -16,6 +16,7 @@
 package it.cosenonjaviste.twowaydatabinding;
 
 import android.databinding.BaseObservable;
+import android.databinding.BindingConversion;
 import android.os.Parcel;
 import android.os.Parcelable;
 
@@ -74,4 +75,9 @@ public class ObservableBoolean extends BaseObservable implements Parcelable, Ser
             return new ObservableBoolean[size];
         }
     };
+
+    @BindingConversion
+    public static boolean convertToBoolean(ObservableBoolean observableBoolean) {
+        return observableBoolean.get();
+    }
 }
