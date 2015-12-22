@@ -16,6 +16,7 @@
 package it.cosenonjaviste.twowaydatabinding;
 
 import android.databinding.BindingAdapter;
+import android.support.v4.util.Pair;
 import android.text.Html;
 import android.view.View;
 import android.widget.CheckBox;
@@ -29,13 +30,18 @@ public class DataBindingConverters {
 
     @BindingAdapter({"app:binding"})
     public static void bindEditText(EditText view, final ObservableString observableString) {
-        if (view.getTag(R.id.bound_observable) != observableString) {
-            view.setTag(R.id.bound_observable, observableString);
-            view.addTextChangedListener(new TextWatcherAdapter() {
+        Pair<ObservableString, TextWatcherAdapter> pair = (Pair) view.getTag(R.id.bound_observable);
+        if (pair == null || pair.first != observableString) {
+            if (pair != null) {
+                view.removeTextChangedListener(pair.second);
+            }
+            TextWatcherAdapter watcher = new TextWatcherAdapter() {
                 @Override public void onTextChanged(CharSequence s, int start, int before, int count) {
                     observableString.set(s.toString());
                 }
-            });
+            };
+            view.setTag(R.id.bound_observable, new Pair<>(observableString, watcher));
+            view.addTextChangedListener(watcher);
         }
         String newValue = observableString.get();
         if (!view.getText().toString().equals(newValue)) {
