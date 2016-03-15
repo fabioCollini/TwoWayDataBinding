@@ -76,7 +76,7 @@ public class DataBindingConverters {
     }
 
     @BindingAdapter({"app:binding"})
-    public static void bindCheckBox(CheckBox view, final ObservableBoolean observableBoolean) {
+    public static void bindCompoundButton(CompoundButton view, final ObservableBoolean observableBoolean) {
         if (observableBoolean != null) {
             if (view.getTag(R.id.bound_observable) != observableBoolean) {
                 view.setTag(R.id.bound_observable, observableBoolean);
